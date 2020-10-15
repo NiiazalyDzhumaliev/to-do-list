@@ -1,5 +1,6 @@
 import './styles.css';
-import { createProject } from './modules/projects';
+import { createProject, showProjects} from './modules/projects';
 import { createToDoList } from './modules/todolist';
 createProject();
-createToDoList();
+// createToDoList();
+// showProjects();
