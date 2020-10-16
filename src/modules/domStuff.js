@@ -15,14 +15,26 @@ const clearElement = (element) => {
 
 
 const showTodos = (selectedList) => {
-  const toDoList = document.querySelector('.todolist');
-  const ul = document.createElement('ul');
-  ul.setAttribute('class', 'todolist-list');
-  toDoList.appendChild(ul);
-  ul.innerHTML += `<li>${selectedList.tasks[selectedList.tasks.length - 1].title}</li>`;
-  ul.innerHTML += `<li>${selectedList.tasks[selectedList.tasks.length - 1].description}</li>`;
-  ul.innerHTML += `<li>${selectedList.tasks[selectedList.tasks.length - 1].dueDate}</li>`;
-  ul.innerHTML += `<li>${selectedList.tasks[selectedList.tasks.length - 1].prior}</li>`;
+  // const toDoList = document.querySelector('.todolist');
+  // const ul = document.createElement('ul');
+  // ul.setAttribute('class', 'todolist-list');
+  // toDoList.appendChild(ul);
+  // ul.innerHTML += `<li>${selectedList.tasks[selectedList.tasks.length - 1].title}</li>`;
+  // ul.innerHTML += `<li>${selectedList.tasks[selectedList.tasks.length - 1].description}</li>`;
+  // ul.innerHTML += `<li>${selectedList.tasks[selectedList.tasks.length - 1].dueDate}</li>`;
+  // ul.innerHTML += `<li>${selectedList.tasks[selectedList.tasks.length - 1].prior}</li>`;
+
+  selectedList.tasks.forEach((task)=>{
+    for (const property in task) {
+      const toDoList = document.querySelector('.todolist');
+      const ul = document.createElement('ul');
+      ul.setAttribute('class', 'todolist-list');
+      tasksContainer.appendChild(ul);
+      const li = document.createElement('li');
+      li.innerHTML = `${task[property]}`;
+      ul.appendChild(li);
+    }
+  })
 };
 
 

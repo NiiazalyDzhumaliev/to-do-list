@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
   <title>To Do List App</title>
 </head>
-<body>
+<body class="d-flex justify-content-around">
 <div class="all-tasks">
   <h2 class="task-list-title">Projects</h2>
   <div class="todolist" data-lists></div>
@@ -16,15 +16,12 @@
       <input type='submit' id="project-btn" class="mt-4"/>
     </form>
 </div>
-
 <div class="todo-list" data-list-display-container>
   <div class="todo-header">
     <h2 class="list-title" data-list-title>Todos</h2>
   </div>
-
   <div class="todo-body">
     <div class="tasks" data-tasks></div>
-
     <div class="new-task-creator">
       <form id="todolist-form">
         <label for="title">Title:</label><br>
@@ -42,20 +39,16 @@
         <input type="submit" id="list-submit">
       </form>
     </div>
-
   </div>
 </div>
-
-
-</div>
-<template id="task-template">
+<!-- <template id="task-template">
   <div class="task">
     <input type="checkbox" />
     <label>
       <span class="custom-checkbox"></span>
     </label>
   </div>
-</template>
+</template> -->
   <script src="main.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
