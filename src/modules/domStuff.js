@@ -38,7 +38,7 @@ function renderLists() {
     listsContainer.appendChild(listElement);
   });
 }
-function render() {
+export function render() {
   clearElement(listsContainer);
   renderLists();
 
@@ -52,4 +52,3 @@ function render() {
     renderTasks(selectedList);
   }
 }
-export default render;
