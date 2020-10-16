@@ -1,6 +1,4 @@
-import './styles.css';
-import { createProject, showProjects} from './modules/projects';
-import { createToDoList } from './modules/todolist';
-createProject();
-// createToDoList();
-// showProjects();
+import { render } from './modules/domStuff';
+// import './styles.css';
+
+render();
