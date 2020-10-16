@@ -7,14 +7,14 @@ const listTitleElement = document.querySelector('[data-list-title]');
 
 const tasksContainer = document.querySelector('[data-tasks]');
 
-function clearElement(element) {
+const clearElement = (element) => {
   while (element.firstChild) {
     element.removeChild(element.firstChild);
   }
-}
+};
 
 
-function renderTasks(selectedList) {
+const showTodos = (selectedList) => {
   const toDoList = document.querySelector('.todolist');
   const ul = document.createElement('ul');
   ul.setAttribute('class', 'todolist-list');
@@ -23,10 +23,10 @@ function renderTasks(selectedList) {
   ul.innerHTML += `<li>${selectedList.tasks[selectedList.tasks.length - 1].description}</li>`;
   ul.innerHTML += `<li>${selectedList.tasks[selectedList.tasks.length - 1].dueDate}</li>`;
   ul.innerHTML += `<li>${selectedList.tasks[selectedList.tasks.length - 1].prior}</li>`;
-}
+};
 
 
-function renderLists() {
+const showProjects = () => {
   projects.forEach(project => {
     const listElement = document.createElement('li');
     listElement.dataset.projectId = project.id;
@@ -37,10 +37,10 @@ function renderLists() {
     }
     listsContainer.appendChild(listElement);
   });
-}
-export function render() {
+};
+export const render = () => {
   clearElement(listsContainer);
-  renderLists();
+  showProjects();
 
   const selectedList = projects.find(project => project.id === selectedProjectId);
   if (selectedProjectId == null) {
@@ -49,6 +49,6 @@ export function render() {
     listDisplayContainer.style.display = '';
     listTitleElement.innerText = selectedList.name;
     clearElement(tasksContainer);
-    renderTasks(selectedList);
+    showTodos(selectedList);
   }
-}
+};

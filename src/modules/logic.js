@@ -1,22 +1,38 @@
-import {render} from './domStuff';
+import { render } from './domStuff';
 
-const listsContainer = document.querySelector('[data-lists]')
-const deleteListButton = document.querySelector('[data-delete-list-button]')
-const clearCompleteTasksButton = document.querySelector('[data-clear-complete-tasks-button]')
+const listsContainer = document.querySelector('[data-lists]');
+// const deleteListButton = document.querySelector('[data-delete-list-button]')
+// const clearCompleteTasksButton = document.querySelector('[data-clear-complete-tasks-button]')
 
-const LOCAL_STORAGE_LIST_KEY = 'projects'
-const LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'selectedProjectId'
-export let projects = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LIST_KEY)) || []
-export let selectedProjectId = localStorage.getItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY)
+const PROJECTS_KEY = 'projects';
+const SELECTED_PROJECTS_KEY = 'selectedProjectId';
+export const projects = JSON.parse(localStorage.getItem(PROJECTS_KEY)) || [];
+export let selectedProjectId = localStorage.getItem(SELECTED_PROJECTS_KEY);
 
 const projectForm = document.getElementById('project-form');
+const projectFactory = (name) => ({ id: Date.now().toString(), name, tasks: [] });
+
+
+const toDoListFactory = (title, description, dueDate, prior) => ({
+  id: Date.now().toString(), title, description, dueDate, prior,
+});
+
+const save = () => {
+  localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
+  localStorage.setItem(SELECTED_PROJECTS_KEY, selectedProjectId);
+};
+const saveAndRender = () => {
+  save();
+  render();
+};
+
 
 listsContainer.addEventListener('click', e => {
   if (e.target.tagName.toLowerCase() === 'li') {
-    selectedProjectId = e.target.dataset.projectId
-    saveAndRender()
+    selectedProjectId = e.target.dataset.projectId;
+    saveAndRender();
   }
-})
+});
 
 // clearCompleteTasksButton.addEventListener('click', e => {
 //   const selectedList = projects.find(list => list.id === selectedProjectId)
@@ -38,20 +54,19 @@ listSubmit.addEventListener('click', (event) => {
   const dueDate = document.getElementById('date').value;
   const prior = document.querySelector("input[name='priority']:checked").value;
 
-  const selectedList = projects.find(project => project.id === selectedProjectId)
-  selectedList.tasks.push(toDoListFactory(title, description, dueDate, prior))
+  const selectedList = projects.find(project => project.id === selectedProjectId);
+  selectedList.tasks.push(toDoListFactory(title, description, dueDate, prior));
 
   toDoListForm.reset();
   event.preventDefault();
-  saveAndRender()
+  saveAndRender();
 });
 
-if(projectForm){
-  console.log('im here')
+if (projectForm) {
   projectForm.addEventListener('submit', (event) => {
     const name = document.getElementById('project-name').value;
 
-    if (name == null || name === '' ){
+    if (name == null || name === '') {
       return false;
     }
 
@@ -59,23 +74,6 @@ if(projectForm){
     saveAndRender();
     projectForm.reset();
     event.preventDefault();
+    return false;
   });
 }
-const projectFactory = (name) => ({ id: Date.now().toString(), name, tasks: [], });;
-
-
-const toDoListFactory = (title, description, dueDate, prior) => {
-  return { id: Date.now().toString(),title, description, dueDate, prior };
-};
-
-function saveAndRender() {
-  save()
-  render()
-}
-
-function save() {
-  localStorage.setItem(LOCAL_STORAGE_LIST_KEY, JSON.stringify(projects))
-  localStorage.setItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY, selectedProjectId)
-}
-
-
