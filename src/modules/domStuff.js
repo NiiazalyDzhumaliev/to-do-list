@@ -24,17 +24,18 @@ const showTodos = (selectedList) => {
   // ul.innerHTML += `<li>${selectedList.tasks[selectedList.tasks.length - 1].dueDate}</li>`;
   // ul.innerHTML += `<li>${selectedList.tasks[selectedList.tasks.length - 1].prior}</li>`;
 
-  selectedList.tasks.forEach((task)=>{
-    for (const property in task) {
-      const toDoList = document.querySelector('.todolist');
+  selectedList.tasks.forEach((task) => {
+    const filteredTask = task;
+    delete filteredTask.id;
+    Object.values(filteredTask).forEach((task1) => {
       const ul = document.createElement('ul');
       ul.setAttribute('class', 'todolist-list');
       tasksContainer.appendChild(ul);
       const li = document.createElement('li');
-      li.innerHTML = `${task[property]}`;
+      li.innerHTML = task1;
       ul.appendChild(li);
-    }
-  })
+    });
+  });
 };
 
 
