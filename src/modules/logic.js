@@ -1,13 +1,13 @@
-import { render } from './domStuff';
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable import/no-cycle */
+
+import { render, selectedProjectId, SELECTED_PROJECTS_KEY } from './domStuff';
 
 const listsContainer = document.querySelector('[data-lists]');
-// const deleteListButton = document.querySelector('[data-delete-list-button]')
-// const clearCompleteTasksButton = document.querySelector('[data-clear-complete-tasks-button]')
+const deleteProjectBtn = document.querySelector('.delProject');
 
 const PROJECTS_KEY = 'projects';
-const SELECTED_PROJECTS_KEY = 'selectedProjectId';
-export const projects = JSON.parse(localStorage.getItem(PROJECTS_KEY)) || [];
-export let selectedProjectId = localStorage.getItem(SELECTED_PROJECTS_KEY);
+export let projects = JSON.parse(localStorage.getItem(PROJECTS_KEY)) || [];
 
 const projectForm = document.getElementById('project-form');
 const projectFactory = (name) => ({ id: Date.now().toString(), name, tasks: [] });
@@ -21,7 +21,7 @@ const save = () => {
   localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
   localStorage.setItem(SELECTED_PROJECTS_KEY, selectedProjectId);
 };
-const saveAndRender = () => {
+export const saveAndRender = () => {
   save();
   render();
 };
@@ -34,16 +34,12 @@ listsContainer.addEventListener('click', e => {
   }
 });
 
-// clearCompleteTasksButton.addEventListener('click', e => {
-//   const selectedList = projects.find(list => list.id === selectedProjectId)
-//   selectedList.tasks = selectedList.tasks.filter(task => !task.complete)
-//   saveAndRender()
-// })
-// deleteListButton.addEventListener('click', e => {
-//   projects= projects.filter(project => project.id !== selectedProjectId)
-//   selectedProjectId = null
-//   saveAndRender()
-// })
+
+deleteProjectBtn.addEventListener('click', () => {
+  projects = projects.filter(project => project.id !== selectedProjectId);
+  selectedProjectId = null;
+  saveAndRender();
+});
 
 
 const toDoListForm = document.getElementById('todolist-form');
@@ -58,9 +54,17 @@ listSubmit.addEventListener('click', (event) => {
   selectedList.tasks.push(toDoListFactory(title, description, dueDate, prior));
 
   toDoListForm.reset();
+  toDoListForm.style.display = 'none';
   event.preventDefault();
   saveAndRender();
 });
+
+document.querySelector('.newtodo').addEventListener('click', () => {
+  if (document.getElementById('todolist-form').style.display === 'none') {
+    document.getElementById('todolist-form').style.display = 'block';
+  }
+});
+
 
 if (projectForm) {
   projectForm.addEventListener('submit', (event) => {
@@ -72,7 +76,6 @@ if (projectForm) {
 
     projects.push(projectFactory(name));
     saveAndRender();
-    projectForm.reset();
     event.preventDefault();
     return false;
   });

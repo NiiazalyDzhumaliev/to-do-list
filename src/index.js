@@ -1,4 +1,4 @@
 import { render } from './modules/domStuff';
-// import './styles.css';
+import './styles.css';
 
 render();
