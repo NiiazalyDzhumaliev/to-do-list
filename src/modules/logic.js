@@ -7,7 +7,7 @@ const listsContainer = document.querySelector('[data-lists]');
 const deleteProjectBtn = document.querySelector('.delProject');
 
 const PROJECTS_KEY = 'projects';
-export let projects = JSON.parse(localStorage.getItem(PROJECTS_KEY)) || [];
+export let projects = JSON.parse(localStorage.getItem(PROJECTS_KEY)) || [{id: "1603023086264", name: "Default ", tasks: []}];
 
 const projectForm = document.getElementById('project-form');
 const projectFactory = (name) => ({ id: Date.now().toString(), name, tasks: [] });
