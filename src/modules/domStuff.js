@@ -1,15 +1,11 @@
-/* eslint-disable import/prefer-default-export */
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable import/no-cycle */
-/* eslint-disable prefer-const */
-/* eslint-disable no-constant-condition */
-/* eslint-disable no-cond-assign */
-/* eslint-disable consistent-return */
+import { projectFactory, toDoListFactory } from './factories';
+import { clearElement } from './logic';
 
-import { projects, saveAndRender } from './logic';
-
-export const SELECTED_PROJECTS_KEY = 'selectedProjectId';
-export let selectedProjectId = localStorage.getItem(SELECTED_PROJECTS_KEY);
+const PROJECTS_KEY = 'projects';
+let projects = JSON.parse(localStorage.getItem(PROJECTS_KEY)) || [{ id: '1603023086264', name: 'Default ', tasks: [] }];
+/* eslint-disable no-use-before-define */
+const SELECTED_PROJECTS_KEY = 'selectedProjectId';
+let selectedProjectId = localStorage.getItem(SELECTED_PROJECTS_KEY);
 
 const content = document.getElementById('content');
 const container = document.getElementById('container');
@@ -17,14 +13,11 @@ const listsContainer = document.querySelector('[data-lists]');
 const listDisplayContainer = document.querySelector('[data-list-display-container]');
 const listTitleElement = document.querySelector('[data-list-title]');
 const tasksContainer = document.querySelector('[data-tasks]');
+const deleteProjectBtn = document.querySelector('.delProject');
+const projectForm = document.getElementById('project-form');
 
-const clearElement = (element) => {
-  while (element.firstChild) {
-    element.removeChild(element.firstChild);
-  }
-};
 
-const showTodos = (selectedList) => {
+export const showTodos = (selectedList) => {
   selectedList.tasks.forEach((task, idx) => {
     // show the title as a btn
     const ul = document.createElement('ul');
@@ -217,6 +210,7 @@ const showTodos = (selectedList) => {
       selectedList.tasks.splice(idx, 1);
       saveAndRender();
     });
+    return false;
   });
 };
 
@@ -249,10 +243,57 @@ export const render = () => {
   }
 };
 
-const todoform = document.getElementById('todolist-form');
-todoform.setAttribute('class', 'active');
-document.querySelector('.newtodo').addEventListener('click', () => {
-  if (todoform.getAttribute('class')) {
-    todoform.style.display = 'block';
+const save = () => {
+  localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
+  localStorage.setItem(SELECTED_PROJECTS_KEY, selectedProjectId);
+};
+
+const saveAndRender = () => {
+  save();
+  render();
+};
+
+
+listsContainer.addEventListener('click', e => {
+  if (e.target.tagName.toLowerCase() === 'li') {
+    selectedProjectId = e.target.dataset.projectId;
+    saveAndRender();
   }
+});
+
+deleteProjectBtn.addEventListener('click', () => {
+  projects = projects.filter(project => project.id !== selectedProjectId);
+  selectedProjectId = null;
+  saveAndRender();
+});
+
+
+const toDoListForm = document.getElementById('todolist-form');
+const listSubmit = document.getElementById('list-submit');
+listSubmit.addEventListener('click', (event) => {
+  const title = document.getElementById('title').value;
+  const description = document.getElementById('description').value;
+  const dueDate = document.getElementById('date').value;
+  const prior = document.querySelector("input[name='priority']:checked").value;
+
+  const selectedList = projects.find(project => project.id === selectedProjectId);
+  selectedList.tasks.push(toDoListFactory(title, description, dueDate, prior));
+
+  toDoListForm.reset();
+  toDoListForm.style.display = 'none';
+  event.preventDefault();
+  saveAndRender();
+});
+
+projectForm.addEventListener('submit', (event) => {
+  const name = document.getElementById('project-name').value;
+
+  if (name == null || name === '') {
+    return false;
+  }
+
+  projects.push(projectFactory(name));
+  saveAndRender();
+  event.preventDefault();
+  return false;
 });
